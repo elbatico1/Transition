@@ -537,14 +537,20 @@ Transition.prototype = {
         };
 
         if (delay > 0) {
-            var that = this.children;
-            setTimeout(function() {
-                that[o.id] = twnobj;
-            }, delay);
+            this._delayFun(this.children,twnobj,o.id,delay);
         } else {
-            this.children[o.id] = twnobj;
-            window.rqanim.addLoop(this, this._callTween);
+            this._startFun(this.children,twnobj,o.id);
         }
+    },
+    _delayFun: function(c,o,id,d){
+        var that=this;
+        setTimeout(function(){
+            that._startFun(c,o,id);
+        }, d);
+    },
+    _startFun: function(c,o,id){
+        c[id]=o;
+        window.rqanim.addLoop(this, this._callTween);
     },
     removeTweener: function(child) {
         if (child.id in this.children) {
